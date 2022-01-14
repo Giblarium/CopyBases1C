@@ -38,11 +38,14 @@
             this.listBox_Bases = new System.Windows.Forms.ListBox();
             this.textBox_debug = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.radioButton_NotCopy = new System.Windows.Forms.RadioButton();
-            this.radioButton_Replace = new System.Windows.Forms.RadioButton();
             this.radioButton_SaveBoth = new System.Windows.Forms.RadioButton();
+            this.radioButton_Replace = new System.Windows.Forms.RadioButton();
+            this.radioButton_NotCopy = new System.Windows.Forms.RadioButton();
             this.button_OpenFolder = new System.Windows.Forms.Button();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.button_SelectBasesList = new System.Windows.Forms.Button();
+            this.button_SelectFolderCopy = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -80,7 +83,7 @@
             // 
             this.textBox_BasesList.Location = new System.Drawing.Point(150, 6);
             this.textBox_BasesList.Name = "textBox_BasesList";
-            this.textBox_BasesList.Size = new System.Drawing.Size(295, 20);
+            this.textBox_BasesList.Size = new System.Drawing.Size(263, 20);
             this.textBox_BasesList.TabIndex = 5;
             // 
             // label2
@@ -97,7 +100,7 @@
             // 
             this.textBox_FolderCopy.Location = new System.Drawing.Point(150, 35);
             this.textBox_FolderCopy.Name = "textBox_FolderCopy";
-            this.textBox_FolderCopy.Size = new System.Drawing.Size(295, 20);
+            this.textBox_FolderCopy.Size = new System.Drawing.Size(263, 20);
             this.textBox_FolderCopy.TabIndex = 5;
             // 
             // listBox_Bases
@@ -132,6 +135,26 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Если копия уже есть:";
             // 
+            // radioButton_SaveBoth
+            // 
+            this.radioButton_SaveBoth.AutoSize = true;
+            this.radioButton_SaveBoth.Location = new System.Drawing.Point(6, 79);
+            this.radioButton_SaveBoth.Name = "radioButton_SaveBoth";
+            this.radioButton_SaveBoth.Size = new System.Drawing.Size(99, 17);
+            this.radioButton_SaveBoth.TabIndex = 0;
+            this.radioButton_SaveBoth.Text = "Сохранить оба";
+            this.radioButton_SaveBoth.UseVisualStyleBackColor = true;
+            // 
+            // radioButton_Replace
+            // 
+            this.radioButton_Replace.AutoSize = true;
+            this.radioButton_Replace.Location = new System.Drawing.Point(7, 56);
+            this.radioButton_Replace.Name = "radioButton_Replace";
+            this.radioButton_Replace.Size = new System.Drawing.Size(75, 17);
+            this.radioButton_Replace.TabIndex = 0;
+            this.radioButton_Replace.Text = "Заменить";
+            this.radioButton_Replace.UseVisualStyleBackColor = true;
+            // 
             // radioButton_NotCopy
             // 
             this.radioButton_NotCopy.AutoSize = true;
@@ -144,26 +167,6 @@
             this.radioButton_NotCopy.Text = "Не копировать";
             this.radioButton_NotCopy.UseVisualStyleBackColor = true;
             // 
-            // radioButton_Replace
-            // 
-            this.radioButton_Replace.AutoSize = true;
-            this.radioButton_Replace.Location = new System.Drawing.Point(7, 56);
-            this.radioButton_Replace.Name = "radioButton_Replace";
-            this.radioButton_Replace.Size = new System.Drawing.Size(75, 17);
-            this.radioButton_Replace.TabIndex = 0;
-            this.radioButton_Replace.Text = "Заменить";
-            this.radioButton_Replace.UseVisualStyleBackColor = true;
-            // 
-            // radioButton_SaveBoth
-            // 
-            this.radioButton_SaveBoth.AutoSize = true;
-            this.radioButton_SaveBoth.Location = new System.Drawing.Point(6, 79);
-            this.radioButton_SaveBoth.Name = "radioButton_SaveBoth";
-            this.radioButton_SaveBoth.Size = new System.Drawing.Size(99, 17);
-            this.radioButton_SaveBoth.TabIndex = 0;
-            this.radioButton_SaveBoth.Text = "Сохранить оба";
-            this.radioButton_SaveBoth.UseVisualStyleBackColor = true;
-            // 
             // button_OpenFolder
             // 
             this.button_OpenFolder.Location = new System.Drawing.Point(451, 250);
@@ -174,11 +177,45 @@
             this.button_OpenFolder.UseVisualStyleBackColor = true;
             this.button_OpenFolder.Click += new System.EventHandler(this.button_OpenFolder_Click);
             // 
+            // linkLabel1
+            // 
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Location = new System.Drawing.Point(350, 379);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(214, 13);
+            this.linkLabel1.TabIndex = 8;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "https://github.com/Giblarium/CopyBases1C";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            // 
+            // button_SelectBasesList
+            // 
+            this.button_SelectBasesList.Location = new System.Drawing.Point(419, 4);
+            this.button_SelectBasesList.Name = "button_SelectBasesList";
+            this.button_SelectBasesList.Size = new System.Drawing.Size(26, 23);
+            this.button_SelectBasesList.TabIndex = 9;
+            this.button_SelectBasesList.Text = "...";
+            this.button_SelectBasesList.UseVisualStyleBackColor = true;
+            this.button_SelectBasesList.Click += new System.EventHandler(this.button_SelectBasesList_Click);
+            // 
+            // button_SelectFolderCopy
+            // 
+            this.button_SelectFolderCopy.Location = new System.Drawing.Point(419, 33);
+            this.button_SelectFolderCopy.Name = "button_SelectFolderCopy";
+            this.button_SelectFolderCopy.Size = new System.Drawing.Size(26, 23);
+            this.button_SelectFolderCopy.TabIndex = 9;
+            this.button_SelectFolderCopy.Text = "...";
+            this.button_SelectFolderCopy.UseVisualStyleBackColor = true;
+            this.button_SelectFolderCopy.Click += new System.EventHandler(this.button_SelectFolderCopy_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(573, 386);
+            this.ClientSize = new System.Drawing.Size(573, 399);
+            this.Controls.Add(this.button_SelectFolderCopy);
+            this.Controls.Add(this.button_SelectBasesList);
+            this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.textBox_debug);
             this.Controls.Add(this.textBox_FolderCopy);
@@ -215,6 +252,9 @@
         private System.Windows.Forms.RadioButton radioButton_NotCopy;
         private System.Windows.Forms.Button button_OpenFolder;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
+        private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.Button button_SelectBasesList;
+        private System.Windows.Forms.Button button_SelectFolderCopy;
     }
 }
 

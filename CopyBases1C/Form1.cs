@@ -12,14 +12,15 @@ namespace CopyBases1C
         public Form1()
         {
             InitializeComponent();
-            textBox_BasesList.Text = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"1C\1CEStart\ibases.v8i"); //todo автовыбор appdata
+            textBox_BasesList.Text = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                @"1C\1CEStart\ibases.v8i"); //todo автовыбор appdata
             DateTime date = DateTime.Now;
             string dateStr = date.Year.ToString() + date.Month.ToString("D2") + date.Day.ToString("D2");
             textBox_FolderCopy.Text = @"D:\BIT\Archive\" + dateStr;
             //button_ReadBasesList_Click();
 
 
-            
+
 
         }
 
@@ -107,27 +108,27 @@ namespace CopyBases1C
 
             if (!File.Exists(sourceFile))
             {
-                debugText += "База " + name + " не скопирована, т.к. файл базы данных не найден.\n";
+                textBox_debug.AppendText("База " + name + " не скопирована, т.к. файл базы данных не найден.\r\n");
                 return;
             }
 
             if (!Directory.Exists(textBox_FolderCopy.Text))
             {
                 Directory.CreateDirectory(textBox_FolderCopy.Text);
-                debugText = "Создана папка:" + textBox_FolderCopy.Text + "\n";
+                textBox_debug.AppendText("Создана папка:" + textBox_FolderCopy.Text + "\r\n");
 
             }
             if (File.Exists(copyFile))
             {
                 if (radioButton_NotCopy.Checked)
                 {
-                    debugText += "База " + name + " не скопирована, т.к. файл уже существует.\n";
+                    textBox_debug.AppendText("База " + name + " не скопирована, т.к. файл уже существует.\r\n");
                     return;
                 }
                 else if (radioButton_Replace.Checked)
                 {
                     File.Copy(sourceFile, copyFile, true);
-                    debugText += "База " + name + " скопирована, файл заменен.\n";
+                    textBox_debug.AppendText("База " + name + " скопирована, файл заменен.\r\n");
                 }
                 else if (radioButton_SaveBoth.Checked)
                 {
@@ -136,7 +137,7 @@ namespace CopyBases1C
                         dateTime.Hour.ToString("D2") + dateTime.Minute.ToString("D2") + dateTime.Second.ToString("D2");
                     copyFile = Path.Combine(textBox_FolderCopy.Text, name + strDateTime + ".1cd");
                     File.Copy(sourceFile, copyFile);
-                    debugText += "База " + name + " скопирована, обе копии сохранинены.\n";
+                    textBox_debug.AppendText("База " + name + " скопирована, обе копии сохранены.\r\n");
 
 
                 }
@@ -144,9 +145,9 @@ namespace CopyBases1C
             else
             {
                 File.Copy(sourceFile, copyFile);
-                debugText += "База " + name + " скопирована.\n";
+                textBox_debug.AppendText("База " + name + " скопирована.\r\n");
             }
-            textBox_debug.Text = debugText;
+            //textBox_debug.Text = debugText;
 
             //throw new NotImplementedException();
         }
@@ -161,6 +162,30 @@ namespace CopyBases1C
             else
             {
                 textBox_debug.Text = "Папки копий не существует";
+            }
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(linkLabel1.Text);
+        }
+
+        private void button_SelectFolderCopy_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog FBD = new FolderBrowserDialog();
+            if (FBD.ShowDialog() == DialogResult.OK)
+            {
+                textBox_FolderCopy.Text =  FBD.SelectedPath;
+            }
+        }
+
+        private void button_SelectBasesList_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog OPF = new OpenFileDialog();
+            OPF.Filter = "Файлы списка баз данных 1С|*.v8i";
+            if (OPF.ShowDialog() == DialogResult.OK)
+            {
+                textBox_BasesList.Text = OPF.FileName;
             }
         }
     }
