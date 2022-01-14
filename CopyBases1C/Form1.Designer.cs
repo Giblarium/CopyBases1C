@@ -46,6 +46,7 @@
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.button_SelectBasesList = new System.Windows.Forms.Button();
             this.button_SelectFolderCopy = new System.Windows.Forms.Button();
+            this.checkBox_OpenFolder = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -102,6 +103,7 @@
             this.textBox_FolderCopy.Name = "textBox_FolderCopy";
             this.textBox_FolderCopy.Size = new System.Drawing.Size(263, 20);
             this.textBox_FolderCopy.TabIndex = 5;
+            this.textBox_FolderCopy.Leave += new System.EventHandler(this.textBox_FolderCopy_Leave);
             // 
             // listBox_Bases
             // 
@@ -208,11 +210,24 @@
             this.button_SelectFolderCopy.UseVisualStyleBackColor = true;
             this.button_SelectFolderCopy.Click += new System.EventHandler(this.button_SelectFolderCopy_Click);
             // 
+            // checkBox_OpenFolder
+            // 
+            this.checkBox_OpenFolder.AutoSize = true;
+            this.checkBox_OpenFolder.Checked = true;
+            this.checkBox_OpenFolder.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox_OpenFolder.Location = new System.Drawing.Point(452, 201);
+            this.checkBox_OpenFolder.Name = "checkBox_OpenFolder";
+            this.checkBox_OpenFolder.Size = new System.Drawing.Size(100, 43);
+            this.checkBox_OpenFolder.TabIndex = 10;
+            this.checkBox_OpenFolder.Text = "По окончании \r\nкопирования \r\nоткрыть папку";
+            this.checkBox_OpenFolder.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(573, 399);
+            this.Controls.Add(this.checkBox_OpenFolder);
             this.Controls.Add(this.button_SelectFolderCopy);
             this.Controls.Add(this.button_SelectBasesList);
             this.Controls.Add(this.linkLabel1);
@@ -255,6 +270,7 @@
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.Button button_SelectBasesList;
         private System.Windows.Forms.Button button_SelectFolderCopy;
+        private System.Windows.Forms.CheckBox checkBox_OpenFolder;
     }
 }
 
