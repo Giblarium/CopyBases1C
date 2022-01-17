@@ -132,7 +132,7 @@ namespace CopyBases1C
         private void CopyBases(string name, string path)
         {
             string sourceFile = Path.Combine(path, "1Cv8.1CD");
-            name = Regex.Replace(name, @"[^\w\.@-]", "", RegexOptions.None, TimeSpan.FromSeconds(1.5));
+            name = Regex.Replace(name, @"[^\w\.@-]", " ", RegexOptions.None, TimeSpan.FromSeconds(1.5));
             string copyFile = Path.Combine(textBox_FolderCopy.Text, name + ".1cd");
             string debugText = "";
 
@@ -205,6 +205,7 @@ namespace CopyBases1C
             if (FBD.ShowDialog() == DialogResult.OK)
             {
                 textBox_FolderCopy.Text = FBD.SelectedPath;
+                textBox_FolderCopy.Text += GetData();
             }
         }
 
