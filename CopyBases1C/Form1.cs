@@ -87,12 +87,13 @@ namespace CopyBases1C
                         else
                         {
                             RenameListBases(namebase, "[Файл не найден] ");
+                            listBase.Add(new Bases { name = namebase, path = "" });
                         }
                     }
                     else
                     {
                         RenameListBases(namebase, "[серверная база] ");
-                        listBase.Add(new Bases { name = namebase, path = pathbase });
+                        listBase.Add(new Bases { name = namebase, path = "" });
                     }
                 }
             }
@@ -205,7 +206,7 @@ namespace CopyBases1C
             if (FBD.ShowDialog() == DialogResult.OK)
             {
                 textBox_FolderCopy.Text = FBD.SelectedPath;
-                textBox_FolderCopy.Text += GetData();
+                textBox_FolderCopy.Text += @"\" + GetData();
             }
         }
 
