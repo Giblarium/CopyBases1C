@@ -16,9 +16,9 @@ namespace CopyBases1C
 
             //начальное заполнение полей
             textBox_BasesList.Text = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                @"1C\1CEStart\ibases.v8i"); 
+                @"1C\1CEStart\ibases.v8i");
             string dateStr = GetDate();
-            
+
             if (File.Exists("CopyBases1C.config")) //считать путь копий из файла, если он существует
             {
                 textBox_FolderCopy.Text = File.ReadAllText("CopyBases1C.config") + dateStr;
@@ -27,7 +27,7 @@ namespace CopyBases1C
             {
                 textBox_FolderCopy.Text = @"D:\BIT\Archive\" + dateStr;
             }
-            
+
             //начальное заполнение списка
             ReadBasesList();
         }
@@ -38,24 +38,32 @@ namespace CopyBases1C
             string dateStr = date.Year.ToString() + date.Month.ToString("D2") + date.Day.ToString("D2");
             return dateStr;
         }
+
+        /// <summary>
+        /// статусы базы
+        /// </summary>
         public enum BasesStatus
         {
-            OK,
-            NotFound,
-            Server
+            OK, // можно копировать
+            NotFound, // файл не найден
+            Server //серверная версия БД
 
         }
+
+        /// <summary>
+        /// описание класса базы
+        /// </summary>
         public class Bases
         {
-            public string name;
-            public string path;
-            public BasesStatus copied;
+            public string name; 
+            public string path; // путь к файлу БД
+            public BasesStatus copied; //копируемая база?
         }
 
 
 
         #region Список баз
-        List<Bases> listBase = new List<Bases>();
+        private List<Bases> listBase = new List<Bases>();
 
         private void button_ReadBasesList_Click(object sender, EventArgs e)
         {
@@ -76,7 +84,7 @@ namespace CopyBases1C
             listBox_Bases.Items.Clear();
             listBase.Clear();
 
-            string namebase = "", pathbase = "", copiedbase = "";
+            string namebase, pathbase, copiedbase = "";
 
             //парсинг файла списка
             while (!sr_BasesList.EndOfStream)
@@ -88,27 +96,31 @@ namespace CopyBases1C
                     str = str.Remove(0, 1);
                     str = str.Remove(str.Length - 1, 1);
                     namebase = str;
-                }
-                if (str.Contains("Connect=")) //если строка содержит "Connect=", то в ней содержится путь к базе
-                {
-                    if (str.Contains("File")) //если строка содержит "File", то база файловая и ее можно копировать
+
+                    str = sr_BasesList.ReadLine();
+                    if (str[0] == '[') continue;
+
+                    if (str.Contains("Connect=")) //если строка содержит "Connect=", то в ней содержится путь к базе
                     {
-                        //обработка пути к файлу БД
-                        str = str.Remove(0, 14);
-                        str = str.Remove(str.Length - 2, 2);
-                        pathbase = str;
-                        if (File.Exists(Path.Combine(pathbase, "1cv8.1cd"))) //файл существует, можно копировать
+                        if (str.Contains("File")) //если строка содержит "File", то база файловая и ее можно копировать
                         {
-                            listBase.Add(new Bases { name = namebase, path = pathbase, copied = BasesStatus.OK });
+                            //обработка пути к файлу БД
+                            str = str.Remove(0, 14);
+                            str = str.Remove(str.Length - 2, 2);
+                            pathbase = str;
+                            if (File.Exists(Path.Combine(pathbase, "1cv8.1cd"))) //файл существует, можно копировать
+                            {
+                                listBase.Add(new Bases { name = namebase, path = pathbase, copied = BasesStatus.OK });
+                            }
+                            else //файла не существует
+                            {
+                                listBase.Add(new Bases { name = namebase, path = "", copied = BasesStatus.NotFound });
+                            }
                         }
-                        else //файла не существует
+                        else //если строка с "Connect=" не содержит "File", то база клиент-серверная или веб-Серверная. База не копируется
                         {
-                            listBase.Add(new Bases { name = namebase, path = "", copied = BasesStatus.NotFound });
+                            listBase.Add(new Bases { name = namebase, path = "", copied = BasesStatus.Server });
                         }
-                    }
-                    else //если строка с "Connect=" не содержит "File", то база клиент-серверная или веб-Серверная. База не копируется
-                    {
-                        listBase.Add(new Bases { name = namebase, path = "", copied = BasesStatus.Server });
                     }
                 }
             }
@@ -137,18 +149,9 @@ namespace CopyBases1C
 
         }
 
-        /// <summary>
-        /// Переименование последнего элемента в листбоксе
-        /// </summary>
-        /// <param name="namebase"></param>
-        /// <param name="param"></param>
-        private void RenameListBases(string namebase, string param) 
-        { 
-            listBox_Bases.Items.Remove(namebase);
-            listBox_Bases.Items.Add(param + namebase);
-        }
-
         #endregion
+
+
         #region Копирование баз
 
         /// <summary>
@@ -242,7 +245,7 @@ namespace CopyBases1C
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void button_OpenFolder_Click(object sender, EventArgs e) 
+        private void button_OpenFolder_Click(object sender, EventArgs e)
         {
             OpenFolderCopy();
         }
@@ -282,8 +285,10 @@ namespace CopyBases1C
         /// <param name="e"></param>
         private void button_SelectBasesList_Click(object sender, EventArgs e)
         {
-            OpenFileDialog OPF = new OpenFileDialog();
-            OPF.Filter = "Файлы списка баз данных 1С|*.v8i";
+            OpenFileDialog OPF = new OpenFileDialog
+            {
+                Filter = "Файлы списка баз данных 1С|*.v8i"
+            };
             if (OPF.ShowDialog() == DialogResult.OK)
             {
                 textBox_BasesList.Text = OPF.FileName;
