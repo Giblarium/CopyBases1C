@@ -38,13 +38,21 @@ namespace CopyBases1C
             string dateStr = date.Year.ToString() + date.Month.ToString("D2") + date.Day.ToString("D2");
             return dateStr;
         }
+        public enum BasesStatus
+        {
+            OK,
+            NotFound,
+            Server
 
+        }
         public class Bases
         {
             public string name;
             public string path;
-            public bool check;
+            public BasesStatus copied;
         }
+
+
 
         #region Список баз
         List<Bases> listBase = new List<Bases>();
@@ -68,21 +76,18 @@ namespace CopyBases1C
             listBox_Bases.Items.Clear();
             listBase.Clear();
 
-            string namebase = "", pathbase = "";
+            string namebase = "", pathbase = "", copiedbase = "";
 
             //парсинг файла списка
             while (!sr_BasesList.EndOfStream)
             {
                 string str = sr_BasesList.ReadLine();
-
-
-
+                //заполнение списка
                 if (str[0] == '[') //если строка начинается с [, то в ней содержится название базы
                 {
                     str = str.Remove(0, 1);
                     str = str.Remove(str.Length - 1, 1);
                     namebase = str;
-                    listBox_Bases.Items.Add(str);
                 }
                 if (str.Contains("Connect=")) //если строка содержит "Connect=", то в ней содержится путь к базе
                 {
@@ -92,25 +97,44 @@ namespace CopyBases1C
                         str = str.Remove(0, 14);
                         str = str.Remove(str.Length - 2, 2);
                         pathbase = str;
-                        if (File.Exists(Path.Combine(pathbase, "1cv8.1cd")))
+                        if (File.Exists(Path.Combine(pathbase, "1cv8.1cd"))) //файл существует, можно копировать
                         {
-                            listBase.Add(new Bases { name = namebase, path = pathbase });
+                            listBase.Add(new Bases { name = namebase, path = pathbase, copied = BasesStatus.OK });
                         }
-                        else //Если файл БД не найден, меняется запись в листбоксе
+                        else //файла не существует
                         {
-                            RenameListBases(namebase, "[Файл не найден] ");
-                            listBase.Add(new Bases { name = namebase, path = "" });
+                            listBase.Add(new Bases { name = namebase, path = "", copied = BasesStatus.NotFound });
                         }
                     }
                     else //если строка с "Connect=" не содержит "File", то база клиент-серверная или веб-Серверная. База не копируется
                     {
-                        RenameListBases(namebase, "[серверная база] ");
-                        listBase.Add(new Bases { name = namebase, path = "" });
+                        listBase.Add(new Bases { name = namebase, path = "", copied = BasesStatus.Server });
                     }
                 }
             }
             //закрыть файл списка баз
             sr_BasesList.Close();
+
+            //Заполнение листбокса
+            foreach (Bases bases in listBase)
+            {
+                switch (bases.copied)
+                {
+                    case BasesStatus.OK:
+                        copiedbase = "";
+                        break;
+                    case BasesStatus.NotFound:
+                        copiedbase = "[Файл БД не найден] ";
+                        break;
+                    case BasesStatus.Server:
+                        copiedbase = "[Серверная БД] ";
+                        break;
+                    default:
+                        break;
+                }
+                listBox_Bases.Items.Add(copiedbase + bases.name);
+            }
+
         }
 
         /// <summary>
@@ -134,17 +158,17 @@ namespace CopyBases1C
         /// <param name="e"></param>
         private void button_CopyBases_Click(object sender, EventArgs e)
         {
-            if (listBox_Bases.SelectedIndices.Count == 0) //если выбрано 0 элементов в листбоксе
+            if (listBox_Bases.SelectedIndices.Count == 0)
             {
                 textBox_debug.Text = "Не выбраны базы!";
-                return; //прервать метод
+                return; //если выбрано 0 элементов в листбоксе, прервать метод
             }
             for (int i = 0; i < listBox_Bases.Items.Count; i++) //перебор элементов листбокса
             {
                 if (listBox_Bases.GetSelected(i)) //если элемент выбран, то проходит копирование
                 {
-                    listBase[i].check = true; 
-                    CopyBases(listBase[i].name, listBase[i].path); //непосредственно - копирование файлов БД
+                    //listBase[i].check = true; 
+                    CopyBases(listBase[i].name, listBase[i].path, listBase[i].copied); //непосредственно - копирование файлов БД
                 }
             }
             if (checkBox_OpenFolder.Checked)
@@ -157,7 +181,7 @@ namespace CopyBases1C
         /// </summary>
         /// <param name="name">имя базы данных и название копии</param>
         /// <param name="path">путь к папке с копиями</param>
-        private void CopyBases(string name, string path)
+        private void CopyBases(string name, string path, BasesStatus status)
         {
             //обработка путей и названий БД
             string sourceFile = Path.Combine(path, "1Cv8.1CD");
@@ -165,10 +189,15 @@ namespace CopyBases1C
             string copyFile = Path.Combine(textBox_FolderCopy.Text, name + ".1cd");
             //string debugText = "";
 
-            if (!File.Exists(sourceFile)) 
+            if (status == BasesStatus.NotFound)
             {
                 textBox_debug.AppendText("База " + name + " не скопирована, т.к. файл базы данных не найден.\r\n");
                 return; //Прервать метод, если файл БД не нейден.
+            }
+            else if (status == BasesStatus.Server)
+            {
+                textBox_debug.AppendText("База " + name + " не скопирована, т.к. база серверная.\r\n");
+                return; //Прервать метод, если база не файловая.
             }
 
             if (!Directory.Exists(textBox_FolderCopy.Text)) //создать папку с копиями, если ее нет
