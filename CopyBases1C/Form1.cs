@@ -276,7 +276,9 @@ namespace CopyBases1C
             {
                 textBox_FolderCopy.Text = FBD.SelectedPath;
                 textBox_FolderCopy.Text += @"\" + GetDate(); //добавление даты в путь копий
+                SafePath();
             }
+
         }
         /// <summary>
         /// обработчик нажатия кнопки "...". Выбор файла списка БД
@@ -292,7 +294,9 @@ namespace CopyBases1C
             if (OPF.ShowDialog() == DialogResult.OK)
             {
                 textBox_BasesList.Text = OPF.FileName;
+                
             }
+            
         }
 
         /// <summary>
@@ -301,6 +305,11 @@ namespace CopyBases1C
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void textBox_FolderCopy_Leave(object sender, EventArgs e)
+        {
+            SafePath();
+        }
+
+        private void SafePath()
         {
             string str = textBox_FolderCopy.Text.Replace(GetDate(), "");
             File.WriteAllText("CopyBases1C.config", str);
