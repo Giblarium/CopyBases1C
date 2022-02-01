@@ -30,6 +30,7 @@ namespace CopyBases1C
 
             //начальное заполнение списка
             ReadBasesList();
+            label_Version.Text = Application.ProductVersion.ToString();
         }
 
         private static string GetDate() //получение строки даты в формате YYYYMMDD

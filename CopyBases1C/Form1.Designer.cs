@@ -47,6 +47,7 @@
             this.button_SelectBasesList = new System.Windows.Forms.Button();
             this.button_SelectFolderCopy = new System.Windows.Forms.Button();
             this.checkBox_OpenFolder = new System.Windows.Forms.CheckBox();
+            this.label_Version = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -222,11 +223,21 @@
             this.checkBox_OpenFolder.Text = "По окончании \r\nкопирования \r\nоткрыть папку";
             this.checkBox_OpenFolder.UseVisualStyleBackColor = true;
             // 
+            // label_Version
+            // 
+            this.label_Version.AutoSize = true;
+            this.label_Version.Location = new System.Drawing.Point(13, 379);
+            this.label_Version.Name = "label_Version";
+            this.label_Version.Size = new System.Drawing.Size(35, 13);
+            this.label_Version.TabIndex = 11;
+            this.label_Version.Text = "label3";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(573, 399);
+            this.Controls.Add(this.label_Version);
             this.Controls.Add(this.checkBox_OpenFolder);
             this.Controls.Add(this.button_SelectFolderCopy);
             this.Controls.Add(this.button_SelectBasesList);
@@ -271,6 +282,7 @@
         private System.Windows.Forms.Button button_SelectBasesList;
         private System.Windows.Forms.Button button_SelectFolderCopy;
         private System.Windows.Forms.CheckBox checkBox_OpenFolder;
+        private System.Windows.Forms.Label label_Version;
     }
 }
 
