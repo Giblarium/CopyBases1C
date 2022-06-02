@@ -167,6 +167,11 @@ namespace CopyBases1C
                 textBox_debug.Text = "Не выбраны базы!";
                 return; //если выбрано 0 элементов в листбоксе, прервать метод
             }
+            if (!Directory.Exists(textBox_FolderCopy.Text)) //создать папку с копиями, если ее нет
+            {
+                Directory.CreateDirectory(textBox_FolderCopy.Text);
+                textBox_debug.AppendText("Создана папка:" + textBox_FolderCopy.Text + "\r\n");
+            }
             for (int i = 0; i < listBox_Bases.Items.Count; i++) //перебор элементов листбокса
             {
                 if (listBox_Bases.GetSelected(i)) //если элемент выбран, то проходит копирование
@@ -204,11 +209,7 @@ namespace CopyBases1C
                 return; //Прервать метод, если база не файловая.
             }
 
-            if (!Directory.Exists(textBox_FolderCopy.Text)) //создать папку с копиями, если ее нет
-            {
-                Directory.CreateDirectory(textBox_FolderCopy.Text);
-                textBox_debug.AppendText("Создана папка:" + textBox_FolderCopy.Text + "\r\n");
-            }
+
 
             if (File.Exists(copyFile)) //если файл копии существует, то согласно настройке
             {
